@@ -1,0 +1,85 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-07T15:02:42.742Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 4,
+    "implemented": 2,
+    "items": [
+      {
+        "id": "REQ-13",
+        "summary": "Add backend support for a Cash leaderboard that returns the top players sorted by Cash descending.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-14",
+        "summary": "Add an admin-only backend capability that guarantees the admin is the unique #1 Cash holder (no other player can have Cash greater than or equal to the admin’s Cash).",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-15",
+        "summary": "Add a frontend leaderboard panel to the main game screen that shows the top players and highlights the current user and the admin user.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useCashLeaderboard.ts",
+          "frontend/src/hooks/useUserRole.ts",
+          "frontend/src/components/LeaderboardPanel.tsx",
+          "frontend/src/pages/GamePage.tsx",
+          "frontend/src/hooks/useCashActions.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useCashLeaderboard.ts",
+          "frontend/src/hooks/useUserRole.ts",
+          "frontend/src/components/LeaderboardPanel.tsx",
+          "frontend/src/pages/GamePage.tsx",
+          "frontend/src/hooks/useCashActions.ts"
+        ]
+      },
+      {
+        "id": "REQ-16",
+        "summary": "If the signed-in user is an admin, add a frontend control to trigger the backend admin action that guarantees the admin is #1 on the leaderboard.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useEnforceAdminLeadership.ts",
+          "frontend/src/components/AdminLeaderboardControls.tsx",
+          "frontend/src/pages/GamePage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useEnforceAdminLeadership.ts",
+          "frontend/src/components/AdminLeaderboardControls.tsx",
+          "frontend/src/pages/GamePage.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/main.mo",
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/AdminLeaderboardControls.tsx",
+    "frontend/src/components/LeaderboardPanel.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useCashActions.ts",
+    "frontend/src/hooks/useCashLeaderboard.ts",
+    "frontend/src/hooks/useEnforceAdminLeadership.ts",
+    "frontend/src/hooks/useUserRole.ts",
+    "frontend/src/pages/GamePage.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

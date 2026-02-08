@@ -1,0 +1,19 @@
+{
+  "frontend/src/App.tsx": "Main application component that handles authentication state and renders either SignInPage or GamePage based on auth status, with initialization now delegated to GamePage.",
+  "frontend/src/pages/SignInPage.tsx": "Landing page for unauthenticated users with game introduction, login button, and feature highlights in a visually appealing layout.",
+  "frontend/src/pages/GamePage.tsx": "Main game interface with cash earning, starter reward claiming, speed upgrades, and a sidebar containing the leaderboard panel and admin controls in a responsive two-column layout.",
+  "frontend/src/components/GameLayout.tsx": "Reusable layout wrapper providing consistent header with logo and login button, main content area, and footer with attribution across all pages.",
+  "frontend/src/components/LoginButton.tsx": "Authentication button component that handles login/logout with Internet Identity and clears query cache on logout.",
+  "frontend/src/hooks/usePlayerStatus.ts": "React Query hook to fetch and auto-refresh player status from backend with proper actor-dependency gating and stable refetch function.",
+  "frontend/src/hooks/useCashActions.ts": "React Query mutation hooks for cash operations (initialize, add, claim reward) and speed upgrades with automatic cache invalidation for player status, cash, and leaderboard queries.",
+  "frontend/index.css": "Global styles with OKLCH-based color system using warm gold/orange primary colors and teal accents, avoiding blue/purple palette.",
+  "frontend/tailwind.config.js": "Tailwind configuration extending the theme with custom color tokens, border radius, and animation utilities.",
+  "frontend/src/main.tsx": "Application entry point that sets up React Query, Internet Identity provider, and renders the root App component with correct CSS import path.",
+  "frontend/src/index.css": "Global styles with OKLCH-based color system using warm gold/orange primary colors and teal accents, avoiding blue/purple palette.",
+  "frontend/src/hooks/useEnsurePlayerInitialized.ts": "Orchestrates the login-to-ready flow by coordinating actor readiness, player initialization, and status loading, providing recovery helpers and normalized error states for the UI.",
+  "frontend/src/hooks/useCashLeaderboard.ts": "React Query hook that fetches the top N players from the cash leaderboard with automatic polling every 5 seconds and proper actor-dependency gating.",
+  "frontend/src/hooks/useUserRole.ts": "React Query hook that checks if the current caller is an admin using the backend's isCallerAdmin method with proper actor-dependency gating.",
+  "frontend/src/hooks/useEnforceAdminLeadership.ts": "React Query mutation hook that calls the backend to enforce admin cash leadership, invalidating player status and leaderboard queries on success and providing clear error messages for unauthorized access.",
+  "frontend/src/components/LeaderboardPanel.tsx": "Displays the top 10 players with their cash amounts, highlighting the current user with \"You\" label and admin users with \"Admin\" label, showing rank with crown icon for first place.",
+  "frontend/src/components/AdminLeaderboardControls.tsx": "Admin-only component that provides a button to enforce admin leadership on the leaderboard, showing success/error feedback and only rendering for authenticated admin users."
+}

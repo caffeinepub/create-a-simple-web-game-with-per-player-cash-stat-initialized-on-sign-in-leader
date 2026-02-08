@@ -1,0 +1,70 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Admin-controlled Cash leaderboard UI with polling and admin-only control",
+  "requirements": [
+    {
+      "id": "REQ-15",
+      "summary": "Add a leaderboard panel on the main game screen that polls top players by Cash and highlights the current user and admin.",
+      "acceptanceCriteria": [
+        "Game UI displays a leaderboard list (e.g., Top 10) with rank, player identifier (Principal text shortened is OK), and Cash amount.",
+        "The leaderboard updates automatically on a reasonable interval and/or after Cash-affecting mutations by invalidating/refetching the leaderboard query via React Query.",
+        "The current signed-in user is visually indicated in the leaderboard (e.g., “You”).",
+        "If the signed-in user is an admin, the UI indicates that status on their leaderboard row (e.g., “Admin”)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useCashLeaderboard.ts",
+          "operation": "create",
+          "description": "Create a React Query hook that calls the backend capability to fetch the cash leaderboard (Top N) and polls on an interval suitable for a game leaderboard; include stable query keys for invalidation. Use the authorization component guidance to compare principals and display identity-related labels in the UI (Verify the component's usage instructions before implementing.)"
+        },
+        {
+          "path": "frontend/src/hooks/useUserRole.ts",
+          "operation": "create",
+          "description": "Create a small React Query hook for fetching the caller's role/admin status using backend capabilities (e.g., isCallerAdmin/getCallerUserRole) so the leaderboard can label admins and gate admin-only controls. Use the authorization component guidance for auth-driven UI states (Verify the component's usage instructions before implementing.)"
+        },
+        {
+          "path": "frontend/src/components/LeaderboardPanel.tsx",
+          "operation": "create",
+          "description": "Implement a leaderboard panel component that renders rank, shortened Principal identifier, and Cash; visually highlight the current signed-in user row (\"You\") and label admin rows (\"Admin\"). Use the authorization component guidance for principal comparison and role-based UI labeling (Verify the component's usage instructions before implementing.)"
+        },
+        {
+          "path": "frontend/src/pages/GamePage.tsx",
+          "operation": "modify",
+          "description": "Wire the new LeaderboardPanel into the main game screen layout (no new route), ensuring it has access to the current user principal/role hooks and is visible alongside existing game actions. Use the authorization component guidance for authenticated-only data display (Verify the component's usage instructions before implementing.)"
+        },
+        {
+          "path": "frontend/src/hooks/useCashActions.ts",
+          "operation": "modify",
+          "description": "Update cash-affecting mutations (add cash, claim reward, upgrade speed, initialize) to additionally invalidate/refetch the leaderboard query key so the leaderboard updates quickly after mutations. Use the authorization component guidance for handling authorization traps surfaced to the UI (Verify the component's usage instructions before implementing.)"
+        }
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "summary": "When signed in as admin, show an admin-only control to trigger the backend action that ensures the admin is #1, with proper refresh and error handling.",
+      "acceptanceCriteria": [
+        "When signed in as admin, the UI shows an admin-only button/control (hidden or disabled for non-admin users) to run the backend action that ensures the admin is top #1.",
+        "After the admin action succeeds, the UI refreshes both player status and leaderboard so the admin’s position is immediately visible without a manual reload.",
+        "Non-admin users do not see or cannot use the admin control, and attempting to call the admin method from the client as a non-admin results in an error surfaced in the UI in clear English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useEnforceAdminLeadership.ts",
+          "operation": "create",
+          "description": "Create a React Query mutation hook that calls the backend capability to enforce admin cash leadership; on success invalidate/refetch both playerStatus and leaderboard queries; on error return a clear English message for display. Use the authorization component guidance for handling authorization errors from traps (Verify the component's usage instructions before implementing.)"
+        },
+        {
+          "path": "frontend/src/components/AdminLeaderboardControls.tsx",
+          "operation": "create",
+          "description": "Add a small UI component containing an admin-only button to run the enforce-admin action; hide or disable it for non-admin users based on role hook; show success/error state in clear English. Use the authorization component guidance for role-gated UI and error handling (Verify the component's usage instructions before implementing.)"
+        },
+        {
+          "path": "frontend/src/pages/GamePage.tsx",
+          "operation": "modify",
+          "description": "Wire AdminLeaderboardControls into the main game screen near the leaderboard; ensure it only renders for admins and triggers refresh of player status and leaderboard via React Query invalidation after success. Use the authorization component guidance for admin gating based on existing access control flow (Verify the component's usage instructions before implementing.)"
+        }
+      ]
+    }
+  ]
+}

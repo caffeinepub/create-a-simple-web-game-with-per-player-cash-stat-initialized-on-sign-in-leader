@@ -1,0 +1,104 @@
+{
+  "kind": "build_request",
+  "title": "Add admin-only leaderboard control so only the admin can be the top Cash holder",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-13",
+      "text": "Add backend support for a Cash leaderboard that returns the top players sorted by Cash descending.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "recent-messages-User-1"
+        ],
+        "quotes": [
+          "Hey also can you make a admin for me so that especially ONLY me can have the most coins in a leaderboard"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes a query method (name up to implementer) that returns an ordered list of players by Cash descending, with a caller-safe data shape (at minimum: player Principal and Cash).",
+        "Leaderboard query does not trap when there are fewer than the requested number of players or when some players have not initialized yet.",
+        "Leaderboard query output is deterministic for ties (e.g., secondary sort by Principal text) so ordering is stable across calls."
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "text": "Add an admin-only backend capability that guarantees the admin is the unique #1 Cash holder (no other player can have Cash greater than or equal to the admin’s Cash).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "recent-messages-User-1"
+        ],
+        "quotes": [
+          "Hey also can you make a admin for me so that especially ONLY me can have the most coins in a leaderboard"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend provides an admin-only method (name up to implementer) to set or boost the admin’s Cash to a value that ensures admin is strictly greater than every other player’s Cash (e.g., set admin cash to currentMax+1).",
+        "All non-admin Cash-increasing paths (e.g., addCash, claimStarterReward, any future grant) enforce the invariant that a non-admin cannot end up with Cash >= adminCash once an adminCash exists; attempts that would violate the invariant are rejected with a clear trap message in English.",
+        "Admin-only methods are protected using existing access control (i.e., non-admin callers cannot invoke them)."
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "text": "Add a frontend leaderboard panel to the main game screen that shows the top players and highlights the current user and the admin user.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages-User-1"
+        ],
+        "quotes": [
+          "Hey also can you make a admin for me so that especially ONLY me can have the most coins in a leaderboard"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Game UI displays a leaderboard list (e.g., Top 10) with rank, player identifier (Principal text shortened is OK), and Cash amount.",
+        "The leaderboard updates automatically on a reasonable interval and/or after Cash-affecting mutations by invalidating/refetching the leaderboard query via React Query.",
+        "The current signed-in user is visually indicated in the leaderboard (e.g., “You”).",
+        "If the signed-in user is an admin, the UI indicates that status on their leaderboard row (e.g., “Admin”)."
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "text": "If the signed-in user is an admin, add a frontend control to trigger the backend admin action that guarantees the admin is #1 on the leaderboard.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages-User-1"
+        ],
+        "quotes": [
+          "Hey also can you make a admin for me so that especially ONLY me can have the most coins in a leaderboard"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When signed in as admin, the UI shows an admin-only button/control (hidden or disabled for non-admin users) to run the backend action that ensures the admin is top #1.",
+        "After the admin action succeeds, the UI refreshes both player status and leaderboard so the admin’s position is immediately visible without a manual reload.",
+        "Non-admin users do not see or cannot use the admin control, and attempting to call the admin method from the client as a non-admin results in an error surfaced in the UI in clear English."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor with all logic in backend/main.mo (no additional backend services).",
+    "Do not edit files under frontend/src/components/ui or any paths listed as immutable in SYSTEM_CONTEXT.",
+    "Use Internet Identity as the only authentication mechanism; admin gating must rely on the existing access control initialization flow (e.g., _initializeAccessControlWithSecret) and/or admin role checks."
+  ],
+  "nonGoals": [
+    "Do not add third-party auth providers or external databases for leaderboard storage.",
+    "Do not implement real-time updates via WebSockets; polling and React Query invalidation are sufficient.",
+    "Do not add complex admin dashboards beyond the minimal leaderboard and admin-only action requested."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

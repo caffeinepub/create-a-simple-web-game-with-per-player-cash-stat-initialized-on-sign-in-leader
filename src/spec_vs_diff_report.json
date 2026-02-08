@@ -1,0 +1,58 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-07T15:02:42.739Z",
+  "summary": "Frontend adds a Cash leaderboard panel and an admin-only control to enforce admin leadership, including React Query hooks for polling and mutation with cache invalidation. However, the diff summary does not provide evidence that the required backend leaderboard query, admin-only enforcement method, or the invariant enforcement on non-admin cash increases were implemented in backend/main.mo. Additionally, the frontend evidence does not clearly show highlighting of the admin user in the leaderboard unless the viewer is the admin (it only checks whether the caller is admin).",
+  "missing_requirements": [
+    {
+      "id": "REQ-13",
+      "requirement": "Backend exposes a query method that returns an ordered list of players by Cash descending (caller-safe shape with at least Principal and Cash), does not trap with fewer players, and has deterministic ordering for ties.",
+      "reason": "Frontend hook calls actor.getCashLeaderboard(BigInt(limit)), but the provided backend/main.mo diff excerpt does not show any getCashLeaderboard (or equivalent) query method nor any sorting/tie-break logic; due to truncation, there is no evidence this was added.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/hooks/useCashLeaderboard.ts"
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "requirement": "Backend provides an admin-only method to ensure admin is unique #1 Cash holder, and all non-admin cash-increasing paths enforce that non-admin cannot reach Cash >= adminCash; violations trap with clear English; method protected by existing access control.",
+      "reason": "Frontend calls actor.enforceAdminCashLeadership(adminPrincipal), but the backend/main.mo excerpt shows addCash and claimStarterReward without any invariant checks against an adminCash ceiling, and shows no admin-only enforcement method or access control gating for it in the visible diff summary.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/hooks/useEnforceAdminLeadership.ts"
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "requirement": "Leaderboard highlights both the current user and the admin user in the list, and indicates admin status on admin’s leaderboard row.",
+      "reason": "LeaderboardPanel uses useIsCallerAdmin(), which only tells whether the current caller is admin. In the visible code, there is no evidence of identifying which leaderboard entry corresponds to the admin user (e.g., by fetching admin principal/role per entry), so highlighting/labeling the admin user’s row is not evidenced unless the current user themselves is admin.",
+      "evidence": [
+        "frontend/src/components/LeaderboardPanel.tsx",
+        "frontend/src/hooks/useUserRole.ts"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Added UI success banner with timed auto-hide (3s) for the admin action and additional decorative UI (icons/cards/scroll area styling).",
+      "reason": "The BuildRequest only asked for a minimal admin-only control and leaderboard; the added success-state banner/auto-hide and extra presentation elements are not explicitly requested.",
+      "evidence": [
+        "frontend/src/components/AdminLeaderboardControls.tsx",
+        "frontend/src/components/LeaderboardPanel.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.62,
+  "changed_files": [
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/src/components/AdminLeaderboardControls.tsx",
+    "frontend/src/components/LeaderboardPanel.tsx",
+    "frontend/src/hooks/useCashActions.ts",
+    "frontend/src/hooks/useCashLeaderboard.ts",
+    "frontend/src/hooks/useEnforceAdminLeadership.ts",
+    "frontend/src/hooks/useUserRole.ts",
+    "frontend/src/pages/GamePage.tsx",
+    "project_state.json"
+  ]
+}

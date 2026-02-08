@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 9,
+  "summary": "Roblox game project with per-player Cash currency, starter reward, click-speed upgrades, and planned leaderboard/admin controls.",
+  "architectural_notes": [
+    "Use Roblox leaderstats (Folder named \"leaderstats\" parented to Player) with an IntValue named \"Cash\" initialized on PlayerAdded."
+  ],
+  "known_issues": [
+    "Bug: Game does not allow the user to play (blocked from starting/entering gameplay)."
+  ],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-create-a-simple-playable-frontend-game-loop-that-uses-the-cash-stat-show-current-cash-provide-at-least-one-interactive-way-to-earn-cash-e-g-a-click-tap-action-that-adds-1-and-provide-a-button-to-claim-the-starter-100-cash-once-eligible",
+      "title": "Create a simple playable frontend game loop that uses the Cash stat: show current Cash, provide at least one interactive way to earn Cash (e.g., a click/tap action that adds +1), and provide a button to claim the starter 100 Cash once eligible.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-coherent-visual-theme-for-the-game-ui-colors-typography-layout-and-apply-it-consistently-across-screens-do-not-use-a-blue-purple-theme",
+      "title": "Add a coherent visual theme for the game UI (colors, typography, layout) and apply it consistently across screens. Do not use a blue/purple theme.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-use-internet-identity-for-player-identification-and-ensure-the-frontend-prompts-the-user-to-sign-in-before-accessing-or-modifying-cash",
+      "title": "Use Internet Identity for player identification and ensure the frontend prompts the user to sign in before accessing or modifying Cash.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-static-generated-image-asset-for-the-game-coin-cash-icon-and-render-it-in-the-ui-near-the-cash-balance",
+      "title": "Add a static generated image asset for the game (coin/cash icon) and render it in the UI near the Cash balance.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-cash-initialization-timing-so-the-app-does-not-attempt-to-initialize-cash-before-the-authenticated-actor-is-ready-and-so-new-players-are-reliably-initialized-before-the-game-tries-to-load-their-status",
+      "title": "Fix the cash initialization timing so the app does not attempt to initialize cash before the authenticated actor is ready, and so new players are reliably initialized before the game tries to load their status.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-improve-the-gameplay-blocking-error-ux-when-the-game-cannot-load-player-status-e-g-player-not-initialized-yet-or-transient-failure-show-an-actionable-recovery-path-e-g-retry-and-or-initialize-with-clear-english-messaging-instead-of-leaving-the-user-stuck",
+      "title": "Improve the gameplay blocking error UX: when the game cannot load player status (e.g., player not initialized yet or transient failure), show an actionable recovery path (e.g., Retry and/or Initialize) with clear English messaging instead of leaving the user stuck.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-game-ui-to-display-the-player-s-current-click-speed-and-add-a-buy-1-speed-10-cash-upgrade-control-that-is-disabled-when-the-player-cannot-afford-it-after-purchase-the-earn-cash-interaction-must-become-faster-based-on-the-upgraded-speed",
+      "title": "Update the game UI to display the player’s current click speed and add a ‘Buy +1 Speed (10 Cash)’ upgrade control that is disabled when the player cannot afford it; after purchase, the Earn Cash interaction must become faster based on the upgraded speed.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-frontend-data-flow-supports-the-new-upgrade-by-adding-react-query-mutation-s-and-cache-invalidation-so-player-status-updates-immediately-after-buying-click-speed",
+      "title": "Ensure the frontend data flow supports the new upgrade by adding React Query mutation(s) and cache invalidation so player status updates immediately after buying click speed.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-frontend-leaderboard-panel-to-the-main-game-screen-that-shows-the-top-players-and-highlights-the-current-user-and-the-admin-user",
+      "title": "Add a frontend leaderboard panel to the main game screen that shows the top players and highlights the current user and the admin user.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-if-the-signed-in-user-is-an-admin-add-a-frontend-control-to-trigger-the-backend-admin-action-that-guarantees-the-admin-is-1-on-the-leaderboard",
+      "title": "If the signed-in user is an admin, add a frontend control to trigger the backend admin action that guarantees the admin is #1 on the leaderboard.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create a Roblox game that uses the provided leaderstats script to add a Cash currency stat for each player on join (including optional starter cash after 5 seconds).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Implement backend support for a per-player currency stat named \"Cash\" that is created/initialized for each new authenticated player and persists across sessions.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Replicate the script’s optional starter reward behavior: after a player’s first time joining, allow them to receive a one-time grant of 100 Cash no earlier than 5 seconds after their join/initialization time.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Ensure any authenticated Internet Identity user can access gameplay without requiring an admin token, by updating backend authorization so initializeCash/getPlayerStatus/addCash/claimStarterReward do not trap with an Unauthorized error for normal signed-in players.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Add a click-speed upgrade that players can purchase with Cash (e.g., pay 10 Cash to increase clicking speed by +1).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Implement a per-player click speed stat that starts at 1, persists across sessions, is returned in getPlayerStatus, and can be upgraded by spending Cash (cost: 10 Cash per +1 speed).",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Add an admin-only capability so only the specified admin user can control/have the highest coin (Cash) amount on a leaderboard (admin identification + leaderboard logic).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Add backend support for a Cash leaderboard that returns the top players sorted by Cash descending.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Add an admin-only backend capability that guarantees the admin is the unique #1 Cash holder (no other player can have Cash greater than or equal to the admin’s Cash).",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "3d",
+  "projectName": "Create a simple web game with per-player Cash stat initialized on sign-in (leaderstats-style)",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

@@ -1,2 +1,3 @@
-# create-a-simple-web-game-with-per-player-cash-stat-initialized-on-sign-in-leader
-Exported from Caffeine project: Create a simple web game with per-player Cash stat initialized on sign-in (leaderstats-style)
+## 
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`

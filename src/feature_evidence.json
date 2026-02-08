@@ -1,0 +1,49 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-add-a-frontend-leaderboard-panel-to-the-main-game-screen-that-shows-the-top-players-and-highlights-the-current-user-and-the-admin-user",
+      "featureTitle": "Add a frontend leaderboard panel to the main game screen that shows the top players and highlights the current user and the admin user.",
+      "files": [
+        "frontend/src/components/LeaderboardPanel.tsx",
+        "frontend/src/hooks/useCashActions.ts",
+        "frontend/src/hooks/useCashLeaderboard.ts",
+        "frontend/src/hooks/useUserRole.ts",
+        "frontend/src/pages/GamePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-15"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-if-the-signed-in-user-is-an-admin-add-a-frontend-control-to-trigger-the-backend-admin-action-that-guarantees-the-admin-is-1-on-the-leaderboard",
+      "featureTitle": "If the signed-in user is an admin, add a frontend control to trigger the backend admin action that guarantees the admin is #1 on the leaderboard.",
+      "files": [
+        "frontend/src/components/AdminLeaderboardControls.tsx",
+        "frontend/src/hooks/useEnforceAdminLeadership.ts",
+        "frontend/src/pages/GamePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
