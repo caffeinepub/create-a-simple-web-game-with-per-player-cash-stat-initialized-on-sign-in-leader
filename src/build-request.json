@@ -1,100 +1,109 @@
 {
   "kind": "build_request",
-  "title": "Add admin-only leaderboard control so only the admin can be the top Cash holder",
+  "title": "Increase visual detail for coins and all in-game objects in the runner canvas",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-13",
-      "text": "Add backend support for a Cash leaderboard that returns the top players sorted by Cash descending.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "recent-messages-User-1"
-        ],
-        "quotes": [
-          "Hey also can you make a admin for me so that especially ONLY me can have the most coins in a leaderboard"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend exposes a query method (name up to implementer) that returns an ordered list of players by Cash descending, with a caller-safe data shape (at minimum: player Principal and Cash).",
-        "Leaderboard query does not trap when there are fewer than the requested number of players or when some players have not initialized yet.",
-        "Leaderboard query output is deterministic for ties (e.g., secondary sort by Principal text) so ordering is stable across calls."
-      ]
-    },
-    {
-      "id": "REQ-14",
-      "text": "Add an admin-only backend capability that guarantees the admin is the unique #1 Cash holder (no other player can have Cash greater than or equal to the admin’s Cash).",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "recent-messages-User-1"
-        ],
-        "quotes": [
-          "Hey also can you make a admin for me so that especially ONLY me can have the most coins in a leaderboard"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend provides an admin-only method (name up to implementer) to set or boost the admin’s Cash to a value that ensures admin is strictly greater than every other player’s Cash (e.g., set admin cash to currentMax+1).",
-        "All non-admin Cash-increasing paths (e.g., addCash, claimStarterReward, any future grant) enforce the invariant that a non-admin cannot end up with Cash >= adminCash once an adminCash exists; attempts that would violate the invariant are rejected with a clear trap message in English.",
-        "Admin-only methods are protected using existing access control (i.e., non-admin callers cannot invoke them)."
-      ]
-    },
-    {
-      "id": "REQ-15",
-      "text": "Add a frontend leaderboard panel to the main game screen that shows the top players and highlights the current user and the admin user.",
+      "id": "REQ-1",
+      "text": "Upgrade the in-game coin rendering in the runner canvas to look significantly more detailed than the current flat circle (e.g., add rim/thickness illusion, inner emboss, specular highlight, subtle shadow, and a lightweight animated shimmer/rotation effect) while keeping performance stable during gameplay.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "recent-messages-User-1"
+          "msg-4"
         ],
         "quotes": [
-          "Hey also can you make a admin for me so that especially ONLY me can have the most coins in a leaderboard"
+          "Can you make the coin and all the things detailed."
         ]
       },
       "acceptanceCriteria": [
-        "Game UI displays a leaderboard list (e.g., Top 10) with rank, player identifier (Principal text shortened is OK), and Cash amount.",
-        "The leaderboard updates automatically on a reasonable interval and/or after Cash-affecting mutations by invalidating/refetching the leaderboard query via React Query.",
-        "The current signed-in user is visually indicated in the leaderboard (e.g., “You”).",
-        "If the signed-in user is an admin, the UI indicates that status on their leaderboard row (e.g., “Admin”)."
+        "Coins in RunnerCanvas3D no longer appear as a single flat filled circle with a simple stroke; they have multiple visual layers (highlight + rim/edge + inner detail + shadow) that read as a ‘coin’.",
+        "Coin detail scales correctly with distance (perspective scale) and remains visually clear across typical canvas sizes.",
+        "The coin animation effect (e.g., shimmer/rotation) does not break collision/collection logic and does not noticeably reduce frame rate compared to current behavior."
       ]
     },
     {
-      "id": "REQ-16",
-      "text": "If the signed-in user is an admin, add a frontend control to trigger the backend admin action that guarantees the admin is #1 on the leaderboard.",
+      "id": "REQ-2",
+      "text": "Increase visual detail for all other core runner objects rendered in the canvas (track/ground, lane dividers, obstacles, and player) so they are more visually rich than basic polygons/rectangles, using consistent lighting/shading cues and the existing theme colors from CSS variables.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "recent-messages-User-1"
+          "msg-4"
         ],
         "quotes": [
-          "Hey also can you make a admin for me so that especially ONLY me can have the most coins in a leaderboard"
+          "Can you make the coin and all the things detailed."
         ]
       },
       "acceptanceCriteria": [
-        "When signed in as admin, the UI shows an admin-only button/control (hidden or disabled for non-admin users) to run the backend action that ensures the admin is top #1.",
-        "After the admin action succeeds, the UI refreshes both player status and leaderboard so the admin’s position is immediately visible without a manual reload.",
-        "Non-admin users do not see or cannot use the admin control, and attempting to call the admin method from the client as a non-admin results in an error surfaced in the UI in clear English."
+        "Track/ground rendering includes additional depth/detail beyond a single filled shape (e.g., gradient, texture-like pattern, edge shading, or subtle motion cues) while preserving the current perspective layout.",
+        "Obstacles visually read as distinct objects (low vs high) with added shading/edges and improved silhouettes compared to single-color rectangles.",
+        "Player rendering is more detailed than a single rectangle and clearly communicates jump/slide states visually (without changing gameplay rules).",
+        "All updated visuals still respect the current light/dark theme CSS variables (background/primary/accent/muted) and remain legible in both themes."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add and use generated static sprite/texture assets (loaded from the frontend public assets folder) to support higher-detail visuals for the coin and other in-game objects, with graceful fallback to procedural canvas drawing if an asset fails to load.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Can you make the coin and all the things detailed."
+        ]
+      },
+      "acceptanceCriteria": [
+        "New image assets are placed under frontend/public/assets/generated and are referenced directly by the frontend (no backend routing).",
+        "RunnerCanvas3D can render using the new assets when available (e.g., drawImage) and falls back to the procedural detailed drawing without runtime errors if assets are missing/unloaded.",
+        "No user-facing text is added that is not in English."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Update the HUD coin icon asset to match the new more-detailed coin style so the HUD and in-world coin visuals feel consistent.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Can you make the coin and all the things detailed."
+        ]
+      },
+      "acceptanceCriteria": [
+        "The HUD coin icon at /assets/generated/coin-icon.dim_256x256.png is replaced by a more detailed version consistent with the in-world coin look.",
+        "RunnerHUD continues to render the coin icon without layout regressions (size remains 32x32 in the HUD)."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor with all logic in backend/main.mo (no additional backend services).",
-    "Do not edit files under frontend/src/components/ui or any paths listed as immutable in SYSTEM_CONTEXT.",
-    "Use Internet Identity as the only authentication mechanism; admin gating must rely on the existing access control initialization flow (e.g., _initializeAccessControlWithSecret) and/or admin role checks."
+    "Do not edit files under frontend/src/components/ui (read-only UI component sources).",
+    "Do not modify Internet Identity hooks or actor hooks located in frontend/src/hooks/useInternetIdentity.ts(x) and frontend/src/hooks/useActor.ts (immutable paths).",
+    "Keep the backend architecture unchanged (single Motoko actor); this request is visual-only unless strictly required for rendering."
   ],
   "nonGoals": [
-    "Do not add third-party auth providers or external databases for leaderboard storage.",
-    "Do not implement real-time updates via WebSockets; polling and React Query invalidation are sufficient.",
-    "Do not add complex admin dashboards beyond the minimal leaderboard and admin-only action requested."
+    "Do not change coin award values, cash economy, collision thresholds, spawn rates, or other gameplay tuning as part of this visual-detail pass.",
+    "Do not add new game mechanics (power-ups, new entity types, missions) beyond improving visuals for existing objects.",
+    "Do not introduce external rendering engines or switch away from the current canvas-based runner renderer."
   ],
   "imageRequirements": {
-    "required": [],
-    "edits": []
+    "required": [
+      "Detailed gold coin sprite with rim, emboss, and specular highlights on transparent background (runner-coin-sprite.dim_256x256.png)",
+      "Detailed low obstacle texture/sprite with shaded edges and surface detail on transparent background (runner-obstacle-low.dim_256x256.png)",
+      "Detailed high obstacle texture/sprite with shaded edges and surface detail on transparent background (runner-obstacle-high.dim_256x256.png)",
+      "Subtle track/ground texture or pattern tile that works in both light/dark palettes (runner-track-tile.dim_512x512.png)",
+      "Simple stylized runner/player sprite with clear silhouette and shading on transparent background (runner-player-sprite.dim_256x256.png)"
+    ],
+    "edits": [
+      "Increase detail and polish of the existing coin HUD icon while keeping a clean transparent background (coin-icon.dim_256x256.png > coin-icon-detailed.dim_256x256.png)"
+    ]
   },
   "userProfileUpdate": {
     "goalsToAdd": [],
     "goalsToRemove": [],
-    "preferencesToAdd": [],
+    "preferencesToAdd": [
+      "Improve in-game object visual fidelity (coins, obstacles, player, track) with more detailed rendering/sprites."
+    ],
     "preferencesToRemove": [],
     "miscToAdd": [],
     "miscToRemove": [],

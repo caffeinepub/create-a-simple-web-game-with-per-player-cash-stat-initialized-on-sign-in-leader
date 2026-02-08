@@ -28,7 +28,8 @@ export type UserRole = { 'admin' : null } |
   { 'guest' : null };
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
-  'addCash' : ActorMethod<[bigint], undefined>,
+  'addCash' : ActorMethod<[], undefined>,
+  'adminAddCash' : ActorMethod<[Principal, bigint], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
   'claimStarterReward' : ActorMethod<[], undefined>,
   'enforceAdminCashLeadership' : ActorMethod<[Principal], undefined>,

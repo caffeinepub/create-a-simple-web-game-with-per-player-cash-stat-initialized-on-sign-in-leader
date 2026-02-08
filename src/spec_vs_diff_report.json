@@ -1,58 +1,55 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-07T15:02:42.739Z",
-  "summary": "Frontend adds a Cash leaderboard panel and an admin-only control to enforce admin leadership, including React Query hooks for polling and mutation with cache invalidation. However, the diff summary does not provide evidence that the required backend leaderboard query, admin-only enforcement method, or the invariant enforcement on non-admin cash increases were implemented in backend/main.mo. Additionally, the frontend evidence does not clearly show highlighting of the admin user in the leaderboard unless the viewer is the admin (it only checks whether the caller is admin).",
+  "generatedAt": "2026-02-08T02:43:50.851Z",
+  "summary": "Diff adds a runner asset preloader and new procedural “detailed” render utilities, and updates RunnerCanvas3D to use theme colors and attempt sprite rendering with procedural fallback. However, the required generated image assets (and HUD coin icon update) are not present in the diff, and obstacle procedural rendering appears to use hardcoded colors rather than CSS-variable theme colors.",
   "missing_requirements": [
     {
-      "id": "REQ-13",
-      "requirement": "Backend exposes a query method that returns an ordered list of players by Cash descending (caller-safe shape with at least Principal and Cash), does not trap with fewer players, and has deterministic ordering for ties.",
-      "reason": "Frontend hook calls actor.getCashLeaderboard(BigInt(limit)), but the provided backend/main.mo diff excerpt does not show any getCashLeaderboard (or equivalent) query method nor any sorting/tie-break logic; due to truncation, there is no evidence this was added.",
+      "id": "REQ-3",
+      "requirement": "Add and use generated static sprite/texture assets placed under frontend/public/assets/generated, referenced directly by the frontend, with graceful fallback if assets fail to load.",
+      "reason": "Code references images under /assets/generated and adds an asset loader, but the diff does not include any actual image assets under frontend/public/assets/generated, so the requirement to add/place generated assets is not implemented in the provided changes.",
       "evidence": [
-        "backend/main.mo",
-        "frontend/src/hooks/useCashLeaderboard.ts"
+        "frontend/src/game/runner/runnerAssets.ts (references '/assets/generated/runner-coin-sprite.dim_256x256.png', etc.)"
       ]
     },
     {
-      "id": "REQ-14",
-      "requirement": "Backend provides an admin-only method to ensure admin is unique #1 Cash holder, and all non-admin cash-increasing paths enforce that non-admin cannot reach Cash >= adminCash; violations trap with clear English; method protected by existing access control.",
-      "reason": "Frontend calls actor.enforceAdminCashLeadership(adminPrincipal), but the backend/main.mo excerpt shows addCash and claimStarterReward without any invariant checks against an adminCash ceiling, and shows no admin-only enforcement method or access control gating for it in the visible diff summary.",
+      "id": "REQ-2",
+      "requirement": "Increase visual detail for track/ground, lane dividers, obstacles, and player using consistent lighting/shading cues and existing theme colors from CSS variables; remain legible in light/dark themes.",
+      "reason": "At least the low obstacle procedural renderer uses hardcoded red palette hex values instead of deriving colors from the theme/CSS variables, which conflicts with the requirement to use existing theme colors consistently.",
       "evidence": [
-        "backend/main.mo",
-        "frontend/src/hooks/useEnforceAdminLeadership.ts"
+        "frontend/src/game/runner/runnerRenderUtils.ts (drawDetailedLowObstacle uses '#ef4444', '#dc2626', '#b91c1c', '#7f1d1d')"
       ]
     },
     {
-      "id": "REQ-15",
-      "requirement": "Leaderboard highlights both the current user and the admin user in the list, and indicates admin status on admin’s leaderboard row.",
-      "reason": "LeaderboardPanel uses useIsCallerAdmin(), which only tells whether the current caller is admin. In the visible code, there is no evidence of identifying which leaderboard entry corresponds to the admin user (e.g., by fetching admin principal/role per entry), so highlighting/labeling the admin user’s row is not evidenced unless the current user themselves is admin.",
-      "evidence": [
-        "frontend/src/components/LeaderboardPanel.tsx",
-        "frontend/src/hooks/useUserRole.ts"
-      ]
+      "id": "REQ-4",
+      "requirement": "Update the HUD coin icon asset at /assets/generated/coin-icon.dim_256x256.png to a more detailed version consistent with the in-world coin; keep HUD icon size 32x32 without layout regressions.",
+      "reason": "No HUD coin icon asset file addition/replacement is shown, and no HUD-related change is evidenced in the diff summary.",
+      "evidence": []
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Added UI success banner with timed auto-hide (3s) for the admin action and additional decorative UI (icons/cards/scroll area styling).",
-      "reason": "The BuildRequest only asked for a minimal admin-only control and leaderboard; the added success-state banner/auto-hide and extra presentation elements are not explicitly requested.",
+      "description": "Project metadata/state tracking updates unrelated to the visual rendering requirements (adding AR-* requests marked pending).",
+      "reason": "BuildRequest is about visual detail in the runner canvas and adding assets; it does not request modifying project tracking files.",
       "evidence": [
-        "frontend/src/components/AdminLeaderboardControls.tsx",
-        "frontend/src/components/LeaderboardPanel.tsx"
+        "project_state.json"
+      ]
+    },
+    {
+      "description": "Repository-wide frontend file summary update (meta documentation) unrelated to implementing runner visual improvements.",
+      "reason": "BuildRequest does not ask for generating/updating a file summary document.",
+      "evidence": [
+        "frontend-file-summaries.txt"
       ]
     }
   ],
-  "confidence": 0.62,
+  "confidence": 0.74,
   "changed_files": [
-    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/components/AdminLeaderboardControls.tsx",
-    "frontend/src/components/LeaderboardPanel.tsx",
-    "frontend/src/hooks/useCashActions.ts",
-    "frontend/src/hooks/useCashLeaderboard.ts",
-    "frontend/src/hooks/useEnforceAdminLeadership.ts",
-    "frontend/src/hooks/useUserRole.ts",
-    "frontend/src/pages/GamePage.tsx",
+    "frontend/src/game/runner/RunnerCanvas3D.tsx",
+    "frontend/src/game/runner/runnerAssets.ts",
+    "frontend/src/game/runner/runnerRenderUtils.ts",
+    "frontend/src/game/runner/runnerTheme.ts",
     "project_state.json"
   ]
 }

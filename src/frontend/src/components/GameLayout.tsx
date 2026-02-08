@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import LoginButton from './LoginButton';
-import { Coins } from 'lucide-react';
+import { Zap } from 'lucide-react';
 import { SiCaffeine } from 'react-icons/si';
 
 interface GameLayoutProps {
@@ -12,10 +12,10 @@ export default function GameLayout({ children }: GameLayoutProps) {
     <div className="min-h-screen flex flex-col bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Coins className="w-8 h-8 text-primary" strokeWidth={2} />
-            <h1 className="text-xl md:text-2xl font-bold">Cash Clicker</h1>
+            <Zap className="w-7 h-7 text-primary" strokeWidth={2.5} />
+            <h1 className="text-xl md:text-2xl font-bold">Endless Runner</h1>
           </div>
           <LoginButton />
         </div>
@@ -27,7 +27,7 @@ export default function GameLayout({ children }: GameLayoutProps) {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-card/30 py-6 mt-12">
+      <footer className="border-t border-border bg-card/30 py-4 mt-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
           <p className="flex items-center justify-center gap-2 flex-wrap">
             © 2026. Built with 

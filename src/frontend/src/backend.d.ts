@@ -31,7 +31,8 @@ export enum UserRole {
     guest = "guest"
 }
 export interface backendInterface {
-    addCash(amount: bigint): Promise<void>;
+    addCash(): Promise<void>;
+    adminAddCash(player: Principal, amount: bigint): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     claimStarterReward(): Promise<void>;
     enforceAdminCashLeadership(admin: Principal): Promise<void>;

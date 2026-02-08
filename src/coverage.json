@@ -1,82 +1,94 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-07T15:02:42.742Z",
+  "generatedAt": "2026-02-08T02:43:50.854Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
     "total": 4,
-    "implemented": 2,
+    "implemented": 4,
     "items": [
       {
-        "id": "REQ-13",
-        "summary": "Add backend support for a Cash leaderboard that returns the top players sorted by Cash descending.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-14",
-        "summary": "Add an admin-only backend capability that guarantees the admin is the unique #1 Cash holder (no other player can have Cash greater than or equal to the admin’s Cash).",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-15",
-        "summary": "Add a frontend leaderboard panel to the main game screen that shows the top players and highlights the current user and the admin user.",
+        "id": "REQ-1",
+        "summary": "Upgrade the in-game coin rendering in the runner canvas to look significantly more detailed than the current flat circle (e.g., add rim/thickness illusion, inner emboss, specular highlight, subtle shadow, and a lightweight animated shimmer/rotation effect) while keeping performance stable during gameplay.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useCashLeaderboard.ts",
-          "frontend/src/hooks/useUserRole.ts",
-          "frontend/src/components/LeaderboardPanel.tsx",
-          "frontend/src/pages/GamePage.tsx",
-          "frontend/src/hooks/useCashActions.ts"
+          "frontend/src/game/runner/RunnerCanvas3D.tsx",
+          "frontend/src/game/runner/runnerRenderUtils.ts"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useCashLeaderboard.ts",
-          "frontend/src/hooks/useUserRole.ts",
-          "frontend/src/components/LeaderboardPanel.tsx",
-          "frontend/src/pages/GamePage.tsx",
-          "frontend/src/hooks/useCashActions.ts"
+          "frontend/src/game/runner/RunnerCanvas3D.tsx",
+          "frontend/src/game/runner/runnerRenderUtils.ts"
         ]
       },
       {
-        "id": "REQ-16",
-        "summary": "If the signed-in user is an admin, add a frontend control to trigger the backend admin action that guarantees the admin is #1 on the leaderboard.",
+        "id": "REQ-2",
+        "summary": "Increase visual detail for all other core runner objects rendered in the canvas (track/ground, lane dividers, obstacles, and player) so they are more visually rich than basic polygons/rectangles, using consistent lighting/shading cues and the existing theme colors from CSS variables.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useEnforceAdminLeadership.ts",
-          "frontend/src/components/AdminLeaderboardControls.tsx",
-          "frontend/src/pages/GamePage.tsx"
+          "frontend/src/game/runner/RunnerCanvas3D.tsx",
+          "frontend/src/game/runner/runnerTheme.ts"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useEnforceAdminLeadership.ts",
-          "frontend/src/components/AdminLeaderboardControls.tsx",
-          "frontend/src/pages/GamePage.tsx"
+          "frontend/src/game/runner/RunnerCanvas3D.tsx",
+          "frontend/src/game/runner/runnerTheme.ts"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Add and use generated static sprite/texture assets (loaded from the frontend public assets folder) to support higher-detail visuals for the coin and other in-game objects, with graceful fallback to procedural canvas drawing if an asset fails to load.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/public/assets/generated/runner-coin-sprite.dim_256x256.png",
+          "frontend/public/assets/generated/runner-obstacle-low.dim_256x256.png",
+          "frontend/public/assets/generated/runner-obstacle-high.dim_256x256.png",
+          "frontend/public/assets/generated/runner-track-tile.dim_512x512.png",
+          "frontend/public/assets/generated/runner-player-sprite.dim_256x256.png",
+          "frontend/src/game/runner/runnerAssets.ts",
+          "frontend/src/game/runner/RunnerCanvas3D.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/public/assets/generated/runner-coin-sprite.dim_256x256.png",
+          "frontend/public/assets/generated/runner-obstacle-low.dim_256x256.png",
+          "frontend/public/assets/generated/runner-obstacle-high.dim_256x256.png",
+          "frontend/public/assets/generated/runner-track-tile.dim_512x512.png",
+          "frontend/public/assets/generated/runner-player-sprite.dim_256x256.png",
+          "frontend/src/game/runner/runnerAssets.ts",
+          "frontend/src/game/runner/RunnerCanvas3D.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Update the HUD coin icon asset to match the new more-detailed coin style so the HUD and in-world coin visuals feel consistent.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/public/assets/generated/coin-icon.dim_256x256.png",
+          "frontend/public/assets/generated/coin-icon-detailed.dim_256x256.png",
+          "frontend/src/game/runner/RunnerHUD.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/public/assets/generated/coin-icon-detailed.dim_256x256.png"
         ]
       }
     ]
   },
   "changedFiles": [
-    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
-    "frontend/src/components/AdminLeaderboardControls.tsx",
-    "frontend/src/components/LeaderboardPanel.tsx",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useCashActions.ts",
-    "frontend/src/hooks/useCashLeaderboard.ts",
-    "frontend/src/hooks/useEnforceAdminLeadership.ts",
-    "frontend/src/hooks/useUserRole.ts",
-    "frontend/src/pages/GamePage.tsx",
+    "frontend/public/assets/generated/coin-icon-detailed.dim_256x256.png",
+    "frontend/public/assets/generated/runner-coin-sprite.dim_256x256.png",
+    "frontend/public/assets/generated/runner-obstacle-high.dim_256x256.png",
+    "frontend/public/assets/generated/runner-obstacle-low.dim_256x256.png",
+    "frontend/public/assets/generated/runner-player-sprite.dim_256x256.png",
+    "frontend/public/assets/generated/runner-track-tile.dim_512x512.png",
+    "frontend/src/game/runner/RunnerCanvas3D.tsx",
+    "frontend/src/game/runner/runnerAssets.ts",
+    "frontend/src/game/runner/runnerRenderUtils.ts",
+    "frontend/src/game/runner/runnerTheme.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

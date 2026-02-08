@@ -16,6 +16,7 @@ actor {
   let joinTimes = Map.empty<PlayerID, Time.Time>();
   let claimedReward = Map.empty<PlayerID, Bool>();
   let clickSpeeds = Map.empty<PlayerID, Speed>();
+  let lastCoinPickup = Map.empty<PlayerID, Time.Time>();
 
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
@@ -33,6 +34,10 @@ actor {
   };
 
   let userProfiles = Map.empty<Principal, UserProfile>();
+
+  // Constants
+  let COIN_VALUE : Nat = 1;
+  let MIN_COIN_PICKUP_INTERVAL : Time.Time = 100_000_000; // 0.1 seconds to prevent spam
 
   // User Profile Management
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
@@ -60,15 +65,43 @@ actor {
     joinTimes.add(caller, Time.now());
     claimedReward.add(caller, false);
     clickSpeeds.add(caller, 1); // Initialize click speed to 1
+    lastCoinPickup.add(caller, 0);
   };
 
-  public shared ({ caller }) func addCash(amount : Nat) : async () {
+  // Fixed amount coin pickup with rate limiting to prevent abuse
+  public shared ({ caller }) func addCash() : async () {
     checkUser(caller);
+    
+    // Rate limiting check
+    let lastPickup = switch (lastCoinPickup.get(caller)) {
+      case (null) { 0 };
+      case (?time) { time };
+    };
+    
+    let now = Time.now();
+    if (now - lastPickup < MIN_COIN_PICKUP_INTERVAL) {
+      Runtime.trap("Coin pickup too fast. Please wait.");
+    };
+    
     let currentCash = switch (players.get(caller)) {
+      case (null) { Runtime.trap("Player not initialized. Use initializeCash() first.") };
+      case (?cash) { cash + COIN_VALUE };
+    };
+    players.add(caller, currentCash);
+    lastCoinPickup.add(caller, now);
+  };
+
+  // Admin-only function to award custom cash amounts
+  public shared ({ caller }) func adminAddCash(player : Principal, amount : Nat) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can perform this action");
+    };
+    
+    let currentCash = switch (players.get(player)) {
       case (null) { amount };
       case (?cash) { cash + amount };
     };
-    players.add(caller, currentCash);
+    players.add(player, currentCash);
   };
 
   public shared ({ caller }) func claimStarterReward() : async () {

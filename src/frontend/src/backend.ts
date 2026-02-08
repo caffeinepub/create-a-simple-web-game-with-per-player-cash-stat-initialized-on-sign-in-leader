@@ -114,7 +114,8 @@ export enum UserRole {
 }
 export interface backendInterface {
     _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
-    addCash(amount: bigint): Promise<void>;
+    addCash(): Promise<void>;
+    adminAddCash(player: Principal, amount: bigint): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     claimStarterReward(): Promise<void>;
     enforceAdminCashLeadership(admin: Principal): Promise<void>;
@@ -146,17 +147,31 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async addCash(arg0: bigint): Promise<void> {
+    async addCash(): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.addCash(arg0);
+                const result = await this.actor.addCash();
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.addCash(arg0);
+            const result = await this.actor.addCash();
+            return result;
+        }
+    }
+    async adminAddCash(arg0: Principal, arg1: bigint): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.adminAddCash(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.adminAddCash(arg0, arg1);
             return result;
         }
     }

@@ -1,68 +1,119 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Admin-controlled Cash leaderboard UI with polling and admin-only control",
+  "title": "High-detail runner canvas visuals with sprites + procedural fallbacks",
   "requirements": [
     {
-      "id": "REQ-15",
-      "summary": "Add a leaderboard panel on the main game screen that polls top players by Cash and highlights the current user and admin.",
+      "id": "REQ-1",
+      "summary": "Render coins as high-detail, multi-layered visuals with lightweight shimmer/rotation while preserving gameplay performance and collision behavior.",
       "acceptanceCriteria": [
-        "Game UI displays a leaderboard list (e.g., Top 10) with rank, player identifier (Principal text shortened is OK), and Cash amount.",
-        "The leaderboard updates automatically on a reasonable interval and/or after Cash-affecting mutations by invalidating/refetching the leaderboard query via React Query.",
-        "The current signed-in user is visually indicated in the leaderboard (e.g., “You”).",
-        "If the signed-in user is an admin, the UI indicates that status on their leaderboard row (e.g., “Admin”)."
+        "Coins in RunnerCanvas3D no longer appear as a single flat filled circle with a simple stroke; they have multiple visual layers (highlight + rim/edge + inner detail + shadow) that read as a ‘coin’.",
+        "Coin detail scales correctly with distance (perspective scale) and remains visually clear across typical canvas sizes.",
+        "The coin animation effect (e.g., shimmer/rotation) does not break collision/collection logic and does not noticeably reduce frame rate compared to current behavior."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useCashLeaderboard.ts",
-          "operation": "create",
-          "description": "Create a React Query hook that calls the backend capability to fetch the cash leaderboard (Top N) and polls on an interval suitable for a game leaderboard; include stable query keys for invalidation. Use the authorization component guidance to compare principals and display identity-related labels in the UI (Verify the component's usage instructions before implementing.)"
-        },
-        {
-          "path": "frontend/src/hooks/useUserRole.ts",
-          "operation": "create",
-          "description": "Create a small React Query hook for fetching the caller's role/admin status using backend capabilities (e.g., isCallerAdmin/getCallerUserRole) so the leaderboard can label admins and gate admin-only controls. Use the authorization component guidance for auth-driven UI states (Verify the component's usage instructions before implementing.)"
-        },
-        {
-          "path": "frontend/src/components/LeaderboardPanel.tsx",
-          "operation": "create",
-          "description": "Implement a leaderboard panel component that renders rank, shortened Principal identifier, and Cash; visually highlight the current signed-in user row (\"You\") and label admin rows (\"Admin\"). Use the authorization component guidance for principal comparison and role-based UI labeling (Verify the component's usage instructions before implementing.)"
-        },
-        {
-          "path": "frontend/src/pages/GamePage.tsx",
+          "path": "frontend/src/game/runner/RunnerCanvas3D.tsx",
           "operation": "modify",
-          "description": "Wire the new LeaderboardPanel into the main game screen layout (no new route), ensuring it has access to the current user principal/role hooks and is visible alongside existing game actions. Use the authorization component guidance for authenticated-only data display (Verify the component's usage instructions before implementing.)"
+          "description": "Upgrade coin rendering to a layered, coin-like appearance (rim/thickness illusion, inner emboss, specular highlight, subtle shadow) and add a lightweight time-based shimmer/rotation effect that only affects drawing (not entity positions/collision). Refactor the render loop to use stable refs for game state and a single requestAnimationFrame loop to avoid re-subscribing on every state change and keep frame rate stable."
         },
         {
-          "path": "frontend/src/hooks/useCashActions.ts",
-          "operation": "modify",
-          "description": "Update cash-affecting mutations (add cash, claim reward, upgrade speed, initialize) to additionally invalidate/refetch the leaderboard query key so the leaderboard updates quickly after mutations. Use the authorization component guidance for handling authorization traps surfaced to the UI (Verify the component's usage instructions before implementing.)"
+          "path": "frontend/src/game/runner/runnerRenderUtils.ts",
+          "operation": "create",
+          "description": "Add reusable canvas helper functions for high-detail procedural rendering (e.g., layered coin drawing with gradients/highlight/shadow, consistent shading utilities) designed to scale cleanly with perspective scale and minimize per-frame allocations."
         }
       ]
     },
     {
-      "id": "REQ-16",
-      "summary": "When signed in as admin, show an admin-only control to trigger the backend action that ensures the admin is #1, with proper refresh and error handling.",
+      "id": "REQ-2",
+      "summary": "Increase visual detail for track/ground, lane dividers, obstacles, and player with consistent shading/lighting cues derived from existing theme CSS variables.",
       "acceptanceCriteria": [
-        "When signed in as admin, the UI shows an admin-only button/control (hidden or disabled for non-admin users) to run the backend action that ensures the admin is top #1.",
-        "After the admin action succeeds, the UI refreshes both player status and leaderboard so the admin’s position is immediately visible without a manual reload.",
-        "Non-admin users do not see or cannot use the admin control, and attempting to call the admin method from the client as a non-admin results in an error surfaced in the UI in clear English."
+        "Track/ground rendering includes additional depth/detail beyond a single filled shape (e.g., gradient, texture-like pattern, edge shading, or subtle motion cues) while preserving the current perspective layout.",
+        "Obstacles visually read as distinct objects (low vs high) with added shading/edges and improved silhouettes compared to single-color rectangles.",
+        "Player rendering is more detailed than a single rectangle and clearly communicates jump/slide states visually (without changing gameplay rules).",
+        "All updated visuals still respect the current light/dark theme CSS variables (background/primary/accent/muted) and remain legible in both themes."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useEnforceAdminLeadership.ts",
-          "operation": "create",
-          "description": "Create a React Query mutation hook that calls the backend capability to enforce admin cash leadership; on success invalidate/refetch both playerStatus and leaderboard queries; on error return a clear English message for display. Use the authorization component guidance for handling authorization errors from traps (Verify the component's usage instructions before implementing.)"
-        },
-        {
-          "path": "frontend/src/components/AdminLeaderboardControls.tsx",
-          "operation": "create",
-          "description": "Add a small UI component containing an admin-only button to run the enforce-admin action; hide or disable it for non-admin users based on role hook; show success/error state in clear English. Use the authorization component guidance for role-gated UI and error handling (Verify the component's usage instructions before implementing.)"
-        },
-        {
-          "path": "frontend/src/pages/GamePage.tsx",
+          "path": "frontend/src/game/runner/RunnerCanvas3D.tsx",
           "operation": "modify",
-          "description": "Wire AdminLeaderboardControls into the main game screen near the leaderboard; ensure it only renders for admins and triggers refresh of player status and leaderboard via React Query invalidation after success. Use the authorization component guidance for admin gating based on existing access control flow (Verify the component's usage instructions before implementing.)"
+          "description": "Enhance non-coin rendering: add track depth cues (gradient/edge shading + optional texture overlay), improve lane divider styling (perspective-aware thickness/dash + subtle glow), render obstacles with richer silhouettes and shading (distinct low vs high), and replace the player rectangle with a more detailed procedural/sprite-based runner that visually reflects jump/slide states while keeping the same gameplay rules and perspective layout."
+        },
+        {
+          "path": "frontend/src/game/runner/runnerTheme.ts",
+          "operation": "create",
+          "description": "Centralize reading and normalization of theme colors from CSS variables (background/primary/accent/muted) into canvas-ready color values so RunnerCanvas3D can apply consistent lighting/shading cues in both light and dark themes."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Add generated sprite/texture assets for runner objects, load them from public assets at runtime, and fall back to detailed procedural drawing if loading fails.",
+      "acceptanceCriteria": [
+        "New image assets are placed under frontend/public/assets/generated and are referenced directly by the frontend (no backend routing).",
+        "RunnerCanvas3D can render using the new assets when available (e.g., drawImage) and falls back to the procedural detailed drawing without runtime errors if assets are missing/unloaded.",
+        "No user-facing text is added that is not in English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/runner-coin-sprite.dim_256x256.png",
+          "operation": "create",
+          "description": "Add generated asset: Detailed gold coin sprite with rim, emboss, and specular highlights on transparent background."
+        },
+        {
+          "path": "frontend/public/assets/generated/runner-obstacle-low.dim_256x256.png",
+          "operation": "create",
+          "description": "Add generated asset: Detailed low obstacle texture/sprite with shaded edges and surface detail on transparent background."
+        },
+        {
+          "path": "frontend/public/assets/generated/runner-obstacle-high.dim_256x256.png",
+          "operation": "create",
+          "description": "Add generated asset: Detailed high obstacle texture/sprite with shaded edges and surface detail on transparent background."
+        },
+        {
+          "path": "frontend/public/assets/generated/runner-track-tile.dim_512x512.png",
+          "operation": "create",
+          "description": "Add generated asset: Subtle track/ground texture or pattern tile that works in both light/dark palettes."
+        },
+        {
+          "path": "frontend/public/assets/generated/runner-player-sprite.dim_256x256.png",
+          "operation": "create",
+          "description": "Add generated asset: Simple stylized runner/player sprite with clear silhouette and shading on transparent background."
+        },
+        {
+          "path": "frontend/src/game/runner/runnerAssets.ts",
+          "operation": "create",
+          "description": "Implement a small image preloader/cache for runner sprites/textures loaded from frontend/public/assets/generated (coin, obstacles, track tile, player). Expose loaded/failed status so RunnerCanvas3D can draw sprites when ready and otherwise use the procedural detailed fallback without throwing."
+        },
+        {
+          "path": "frontend/src/game/runner/RunnerCanvas3D.tsx",
+          "operation": "modify",
+          "description": "Wire the new generated assets into rendering: attempt to draw runner sprites/textures (drawImage/pattern) when loaded; if any asset is missing or fails to load, render the equivalent high-detail procedural version without runtime errors. Ensure sprite usage respects perspective scale and does not affect collision/collection logic."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Update the HUD coin icon asset to match the new in-world coin style while preserving the HUD layout and sizing.",
+      "acceptanceCriteria": [
+        "The HUD coin icon at /assets/generated/coin-icon.dim_256x256.png is replaced by a more detailed version consistent with the in-world coin look.",
+        "RunnerHUD continues to render the coin icon without layout regressions (size remains 32x32 in the HUD)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/coin-icon.dim_256x256.png",
+          "operation": "modify",
+          "description": "Replace the existing HUD coin icon binary with a more detailed coin icon consistent with the updated in-world coin style (transparent background)."
+        },
+        {
+          "path": "frontend/public/assets/generated/coin-icon-detailed.dim_256x256.png",
+          "operation": "create",
+          "description": "Add the edited/polished version of the coin HUD icon as a separate generated asset (for traceability), matching the new coin style with a clean transparent background."
+        },
+        {
+          "path": "frontend/src/game/runner/RunnerHUD.tsx",
+          "operation": "modify",
+          "description": "Confirm HUD continues to reference /assets/generated/coin-icon.dim_256x256.png and that the icon remains 32x32 with no layout regressions after the asset update."
         }
       ]
     }

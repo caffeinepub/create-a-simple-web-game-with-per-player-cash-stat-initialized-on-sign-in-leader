@@ -1,13 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Add a Cash leaderboard and admin-only controls so the admin can always remain the unique #1 Cash holder.
+**Goal:** Improve the visual fidelity of coins and all core runner canvas objects (track/ground, lane dividers, obstacles, player) while keeping gameplay performance and rules unchanged.
 
 **Planned changes:**
-- Backend: add a leaderboard query that returns top players sorted by Cash (descending) with deterministic tie-breaking and safe handling for missing/uninitialized players.
-- Backend: add an admin-only method to set/boost admin Cash to strictly exceed all other players, and enforce an invariant so non-admin users cannot reach Cash >= adminCash once set.
-- Frontend: add a leaderboard panel on the main game screen showing rank, player identifier, and Cash, with automatic refresh via polling and/or React Query invalidation after Cash changes.
-- Frontend: highlight the signed-in user in the leaderboard and indicate admin status on the admin’s row.
-- Frontend: when signed in as admin, show an admin-only control to trigger the backend “ensure admin is #1” action; surface clear errors for non-admin attempts and refresh UI state after success.
+- Upgrade coin rendering in RunnerCanvas3D to a multi-layer, more realistic coin look (rim/edge, inner emboss, highlight, shadow) with a lightweight shimmer/rotation animation that does not affect collision/collection logic.
+- Enhance canvas visuals for track/ground, lane dividers, obstacles, and player using richer shading/lighting cues and silhouettes, driven by existing theme CSS variables and remaining legible in light/dark themes.
+- Add support for loading static sprite/texture assets from `frontend/public/assets/generated` (e.g., via `drawImage`) with a graceful fallback to the detailed procedural canvas drawing if assets fail to load.
+- Update the HUD coin icon to match the new detailed coin style while keeping the existing HUD sizing/layout (32x32 display).
 
-**User-visible outcome:** Players can view a Cash leaderboard in the game UI, see themselves highlighted, and (if signed in as admin) use an admin-only button to guarantee the admin is the sole top Cash holder.
+**User-visible outcome:** Coins, obstacles, track, and the player look significantly more detailed and consistent (including the HUD coin icon), with smooth gameplay and no changes to game mechanics.

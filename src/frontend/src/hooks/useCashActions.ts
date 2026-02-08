@@ -23,17 +23,14 @@ export function useAddCash() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (amount: bigint) => {
+    mutationFn: async () => {
       if (!actor) throw new Error('Actor not available');
-      await actor.addCash(amount);
+      await actor.addCash();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['playerStatus'] });
       queryClient.invalidateQueries({ queryKey: ['cash'] });
       queryClient.invalidateQueries({ queryKey: ['cashLeaderboard'] });
-    },
-    onError: (error) => {
-      console.error('Failed to add cash:', error);
     },
   });
 }
@@ -52,10 +49,6 @@ export function useClaimStarterReward() {
       queryClient.invalidateQueries({ queryKey: ['cash'] });
       queryClient.invalidateQueries({ queryKey: ['cashLeaderboard'] });
     },
-    onError: (error: any) => {
-      console.error('Failed to claim reward:', error);
-      throw error;
-    },
   });
 }
 
@@ -71,11 +64,6 @@ export function useUpgradeSpeed() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['playerStatus'] });
       queryClient.invalidateQueries({ queryKey: ['cash'] });
-      queryClient.invalidateQueries({ queryKey: ['cashLeaderboard'] });
-    },
-    onError: (error: any) => {
-      console.error('Failed to upgrade speed:', error);
-      throw error;
     },
   });
 }

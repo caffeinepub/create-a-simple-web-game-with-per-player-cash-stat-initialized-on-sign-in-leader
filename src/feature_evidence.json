@@ -2,14 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-a-frontend-leaderboard-panel-to-the-main-game-screen-that-shows-the-top-players-and-highlights-the-current-user-and-the-admin-user",
-      "featureTitle": "Add a frontend leaderboard panel to the main game screen that shows the top players and highlights the current user and the admin user.",
+      "featureId": "feature-upgrade-the-in-game-coin-rendering-in-the-runner-canvas-to-look-significantly-more-detailed-than-the-current-flat-circle-e-g-add-rim-thickness-illusion-inner-emboss-specular-highlight-subtle-shadow-and-a-lightweight-animated-shimmer-rotation-effect-while-keeping-performance-stable-during-gameplay",
+      "featureTitle": "Upgrade the in-game coin rendering in the runner canvas to look significantly more detailed than the current flat circle (e.g., add rim/thickness illusion, inner emboss, specular highlight, subtle shadow, and a lightweight animated shimmer/rotation effect) while keeping performance stable during gameplay.",
       "files": [
-        "frontend/src/components/LeaderboardPanel.tsx",
-        "frontend/src/hooks/useCashActions.ts",
-        "frontend/src/hooks/useCashLeaderboard.ts",
-        "frontend/src/hooks/useUserRole.ts",
-        "frontend/src/pages/GamePage.tsx"
+        "frontend/src/game/runner/RunnerCanvas3D.tsx",
+        "frontend/src/game/runner/runnerRenderUtils.ts"
       ],
       "components": [
         "authorization@4.0.0",
@@ -20,17 +17,16 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-15"
+        "REQ-1"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-if-the-signed-in-user-is-an-admin-add-a-frontend-control-to-trigger-the-backend-admin-action-that-guarantees-the-admin-is-1-on-the-leaderboard",
-      "featureTitle": "If the signed-in user is an admin, add a frontend control to trigger the backend admin action that guarantees the admin is #1 on the leaderboard.",
+      "featureId": "feature-increase-visual-detail-for-all-other-core-runner-objects-rendered-in-the-canvas-track-ground-lane-dividers-obstacles-and-player-so-they-are-more-visually-rich-than-basic-polygons-rectangles-using-consistent-lighting-shading-cues-and-the-existing-theme-colors-from-css-variables",
+      "featureTitle": "Increase visual detail for all other core runner objects rendered in the canvas (track/ground, lane dividers, obstacles, and player) so they are more visually rich than basic polygons/rectangles, using consistent lighting/shading cues and the existing theme colors from CSS variables.",
       "files": [
-        "frontend/src/components/AdminLeaderboardControls.tsx",
-        "frontend/src/hooks/useEnforceAdminLeadership.ts",
-        "frontend/src/pages/GamePage.tsx"
+        "frontend/src/game/runner/RunnerCanvas3D.tsx",
+        "frontend/src/game/runner/runnerTheme.ts"
       ],
       "components": [
         "authorization@4.0.0",
@@ -41,7 +37,44 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-16"
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-and-use-generated-static-sprite-texture-assets-loaded-from-the-frontend-public-assets-folder-to-support-higher-detail-visuals-for-the-coin-and-other-in-game-objects-with-graceful-fallback-to-procedural-canvas-drawing-if-an-asset-fails-to-load",
+      "featureTitle": "Add and use generated static sprite/texture assets (loaded from the frontend public assets folder) to support higher-detail visuals for the coin and other in-game objects, with graceful fallback to procedural canvas drawing if an asset fails to load.",
+      "files": [
+        "frontend/src/game/runner/RunnerCanvas3D.tsx",
+        "frontend/src/game/runner/runnerAssets.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-hud-coin-icon-asset-to-match-the-new-more-detailed-coin-style-so-the-hud-and-in-world-coin-visuals-feel-consistent",
+      "featureTitle": "Update the HUD coin icon asset to match the new more-detailed coin style so the HUD and in-world coin visuals feel consistent.",
+      "files": [],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
       ],
       "confidence": "high"
     }

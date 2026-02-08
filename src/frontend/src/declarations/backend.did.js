@@ -32,7 +32,8 @@ export const Player = IDL.Record({
 
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
-  'addCash' : IDL.Func([IDL.Nat], [], []),
+  'addCash' : IDL.Func([], [], []),
+  'adminAddCash' : IDL.Func([IDL.Principal, IDL.Nat], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'claimStarterReward' : IDL.Func([], [], []),
   'enforceAdminCashLeadership' : IDL.Func([IDL.Principal], [], []),
@@ -83,7 +84,8 @@ export const idlFactory = ({ IDL }) => {
   
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
-    'addCash' : IDL.Func([IDL.Nat], [], []),
+    'addCash' : IDL.Func([], [], []),
+    'adminAddCash' : IDL.Func([IDL.Principal, IDL.Nat], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'claimStarterReward' : IDL.Func([], [], []),
     'enforceAdminCashLeadership' : IDL.Func([IDL.Principal], [], []),
